@@ -1,4 +1,4 @@
-const PostService = require("../services/post.service");
+const PostService = require("../services/posts.service");
 const postService = new PostService();
 
 class PostController {
