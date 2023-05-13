@@ -10,8 +10,5 @@ const likeRouter = require("./like.routes");
 router.use("/auth", authRouter);
 
 router.use("/posts", [commentRouter, likeRouter]);
-// router.use("/posts", [postRouter, commentRouter, likeRouter]);
-
-// router.use();
 
 module.exports = router;

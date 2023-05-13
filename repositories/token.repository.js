@@ -2,13 +2,20 @@ const { Tokens } = require("../models");
 
 class TokenRepository {
   // Tokens table에 refresh token 저장
-  saveRefreshToken = async (user_id, refreshToken) => {
-    const saveRefreshToken = await Tokens.create({
+  saveToken = async (user_id, refreshToken) => {
+    const saveToken = await Tokens.create({
       token: refreshToken,
       user_id: user_id,
     });
 
-    return saveRefreshToken;
+    return saveToken;
+  };
+
+  findTokenId = async (authRefreshToken) => {
+    const accessTokenId = await Tokens.findOne({ where: { authRefreshToken } });
+    const { user_id } = accessTokenId;
+
+    return user_id;
   };
 }
 

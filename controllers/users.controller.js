@@ -96,14 +96,14 @@ class UserController {
       }
 
       // 로그인 성공하면 Access token, Refresh token 생성
-      const accessToken = await this.userService.createAccessToken(user_id);
+      const accessToken = await this.userService.createAccessToken(loginUser);
       const refreshToken = await this.userService.createRefreshToken();
 
       // Tokens table에 refresh token 저장
-      await this.userService.saveRefreshToken(refreshToken, user_id);
+      await this.userService.saveToken(loginUser, refreshToken);
 
-      res.cookie("AccessToken", Bearer`${accessToken}`);
-      res.cookie("RefreshToken", Bearer`${refreshToken}`);
+      res.cookie("AccessToken", `Bearer ${accessToken}`);
+      res.cookie("RefreshToken", `Bearer ${refreshToken}`);
 
       return res.status(200).json({ accessToken, refreshToken });
     } catch (error) {
