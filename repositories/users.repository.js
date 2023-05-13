@@ -1,13 +1,13 @@
-const { Users, UserInfos } = require("../models");
+const { Users, UsersInfos } = require("../models");
 
 class UserRepository {
   // DB에서 중복되는 닉네임 찾기
-  existNickname = async (nickname) => {
+  findNickname = async (nickname) => {
     const existNickname = await Users.findOne({ where: { nickname } });
     return existNickname;
   };
   // DB에서 중복되는 이메일 찾기
-  existEmail = async (email) => {
+  findEmail = async (email) => {
     const existEmail = await Users.findOne({ where: { email } });
     return existEmail;
   };

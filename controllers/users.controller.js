@@ -11,25 +11,25 @@ class UserController {
       const nicknameFilter = /^[a-zA-Z0-9]{6,}/gi;
       const passwordFilter = /[a-zA-Z0-9]{8,}/gi;
       const emailFilter = /[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/gi;
-      const existNickname = await this.userService.findNicname(nickname);
-      const existEmail = await this.userService.findOneEmail(email);
+      const existNickname = await this.userService.findNickname(nickname);
+      const existEmail = await this.userService.findEmail(email);
 
       // 닉네임 길이 6 이상, 영어 대소문자만, 숫자0-9만 가능
-      if (nicknameFilter.test(nickname)) {
+      if (!nicknameFilter.test(nickname)) {
         return res
           .status(412)
           .json({ errorMessage: "닉네임의 형식이 일치하지 않습니다." });
       }
 
       // 이메일 형식이 비정상적인 경우
-      if (emailFilter.test(email)) {
+      if (!emailFilter.test(email)) {
         return res
           .status(412)
           .json({ errorMessage: "이메일의 형식이 일치하지 않습니다." });
       }
 
       // password 길이 8이상, 영어대소문자만, 숫자0-9만 가능
-      if (passwordFilter.test(password)) {
+      if (!passwordFilter.test(password)) {
         return res
           .status(412)
           .json({ errorMessage: "패스워드 형식이 일치하지 않습니다." });

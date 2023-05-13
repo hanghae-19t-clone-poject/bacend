@@ -8,13 +8,13 @@ class UserService {
   tokenRepository = new TokenRepository();
 
   // 중복되는 닉네임 찾기
-  existNickname = async (nickname) => {
+  findNickname = async (nickname) => {
     const existNickname = await this.userRepository.findNickname(nickname);
     return existNickname;
   };
 
   // 중복되는 이메일 찾기
-  existEmail = async (email) => {
+  findEmail = async (email) => {
     const existEmail = await this.userRepository.findEmail(email);
     return existEmail;
   };
