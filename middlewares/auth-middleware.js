@@ -5,7 +5,7 @@ const TokenRepository = require("../repositories/token.repository");
 TokenRepository = new TokenRepository();
 
 module.exports = async (req, res, next) => {
-  const { AccessToken, RefreshToken } = req.body;
+  const { AccessToken, RefreshToken } = req.headers;
   try {
     const [authAccessType, authAccessToken] = (AccessToken ?? "").split(" ");
     const [authRefreshType, authRefreshToken] = (RefreshToken ?? "").split(" ");
