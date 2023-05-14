@@ -10,23 +10,18 @@ module.exports = async (req, res, next) => {
     const [authAccessType, authAccessToken] = (AccessToken ?? "").split(" ");
     const [authRefreshType, authRefreshToken] = (RefreshToken ?? "").split(" ");
 
-    if (authRefreshType !== "Bearer" || authAccessType !== "Bearer") {
+    // access token 존재하지 않을때
+    if (authRefreshType !== "Bearer" || !authRefreshToken) {
       return res
         .status(403)
         .json({ errorMessage: "로그인이 필요한 기능입니다." });
     }
 
-    // refresh token 만료
-    if (!authRefreshToken) {
+    // refresh token 존재하지 않을때
+    if (authAccessType !== "Bearer" || !authAccessToken) {
       return res
         .status(400)
-        .json({ errorMessage: "Refresh Token이 존재하지 않습니다." });
-    }
-    // acceess token 만료
-    if (!authAccessToken) {
-      return res
-        .status(400)
-        .json({ errorMessage: "Access Token이 존재하지 않습니다." });
+        .json({ errorMessage: "로그인이 필요한 기능입니다." });
     }
 
     const isAccessTokenValidate = validateAccessToken(authAccessToken);

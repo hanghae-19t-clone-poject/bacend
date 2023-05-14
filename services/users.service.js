@@ -69,6 +69,12 @@ class UserService {
       refreshToken
     );
   };
+
+  // logout 했을 때, token 삭제
+  logout = async (user_id) => {
+    await this.tokenRepository.deleteToken(user_id);
+    return;
+  };
 }
 
 module.exports = UserService;
