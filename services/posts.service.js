@@ -44,28 +44,38 @@ class PostService {
 
 
   
-  getBestPosts = async () => {
+  async getBestPosts() {
+  try {
     const posts = await postRepository.getPosts();
-    const results = await Promise.all(
-      posts.map(async (item) => {
-        return await postRepository.getPosts(item);
+
+    posts.sort((a, b) => b.likes - a.likes);
+    const topTwentyPosts = posts.slice(0, 20);
+
+    const bestPosts = await Promise.all(
+      topTwentyPosts.map(async (item) => {
+        const post = {
+          post_id: item.post_id,
+          user_id: item.user_id,
+          nickname: item.nickname,
+          title: item.title,
+          content: item.content,
+          likes: item.likes,
+          views: item.views,
+          price: item.price,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt,
+          photo_url: item.photo_url,
+          current_status: item.current_status,
+        };
+
+        return post;
       })
     );
-  
-    if (results.length === 0) {
-      throw new Error("아직 게시물이 존재하지 않습니다.");
-    }
-  
-    let bestPosts;
-    if (results.length < 20) {
-      bestPosts = results;
-    } else {
-      const sortedPosts = results.sort((a, b) => b.likeCount - a.likeCount);
-      bestPosts = sortedPosts.slice(0, 20);
-    }
-  
     return bestPosts;
+  } catch (error) {
+    return { error: true, message: error.message };
   };
+};
 
 
 
