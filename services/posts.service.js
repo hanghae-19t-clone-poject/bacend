@@ -38,14 +38,10 @@ class PostService {
     }
   }
 
-<<<<<<< HEAD
 
   
   async getBestPosts() {
   try {
-=======
-  getBestPosts = async () => {
->>>>>>> dc4b8ea53a1cb29f821b87b086045589917278f8
     const posts = await postRepository.getPosts();
 
     posts.sort((a, b) => b.likes - a.likes);
@@ -71,22 +67,6 @@ class PostService {
         return post;
       })
     );
-<<<<<<< HEAD
-=======
-
-    if (results.length === 0) {
-      throw new Error("아직 게시물이 존재하지 않습니다.");
-    }
-
-    let bestPosts;
-    if (results.length < 20) {
-      bestPosts = results;
-    } else {
-      const sortedPosts = results.sort((a, b) => b.likeCount - a.likeCount);
-      bestPosts = sortedPosts.slice(0, 20);
-    }
-
->>>>>>> dc4b8ea53a1cb29f821b87b086045589917278f8
     return bestPosts;
   } catch (error) {
     return { error: true, message: error.message };
