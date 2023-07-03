@@ -4,6 +4,7 @@ const TokenRepository = require("../repositories/tokens.repository");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { Users, Tokens } = require("../models");
+const config = require("../config/config");
 
 class UserService {
   userRepository = new UserRepository(Users);
@@ -30,7 +31,7 @@ class UserService {
     profile_image,
     introduction
   ) => {
-    const saltRounds = BCRYPT_SALT_ROUNDS;
+    const saltRounds = config.bcrypt.saltRounds;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const signupData = await this.userRepository.signup(
@@ -59,13 +60,13 @@ class UserService {
       { user_id: loginUser.user_id },
       process.env.ACCESS_KEY,
       {
-        expiresIn: process.env.ACCESS_EXPIRES,
+        expiresIn: config.jwt.accessExpiresIn,
       }
     );
 
     // refreshToken 생성
     const refreshToken = jwt.sign({}, process.env.REFRESH_KEY, {
-      expiresIn: process.env.REFRESH_EXPIRES,
+      expiresIn: config.jwt.refreshExpiresIn,
     });
 
     // Tokens Table에 refresh token 저장
