@@ -79,7 +79,7 @@ socket.on("connect", () => {
 socket.on("update", (data) => {
   console.log(`${data.name}:${data.message}`);
   let chat = document.getElementById("chat");
-  let message = document.createElement("div");
+  let message = document.createElement("span");
   let node = document.createTextNode(`${data.name}: ${data.message}`);
   let className = "";
 
@@ -114,7 +114,7 @@ function send() {
   document.getElementById("test").value = "";
 
   let chat = document.getElementById("chat");
-  let msg = document.createElement("div");
+  let msg = document.createElement("span");
   let node = document.createTextNode(message);
 
   msg.classList.add("me");

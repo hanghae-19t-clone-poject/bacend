@@ -68,7 +68,7 @@ class LikesService {
         await this.likesRepository.commentDecreaseLikes(comment_id);
         await t.commit();
 
-        return { message: "월드컵 취소 좋아요 완료" };
+        return { message: "월드컵 취소 좋아요 완료" }; //ㅋㅋㅋㅋ
       } else {
         await this.likesRepository.createCommentLike(
           user_id,

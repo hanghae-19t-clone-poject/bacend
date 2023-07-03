@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
     io.to(socket.room).emit("update", {
       type: "connect",
       name: "POTATO MASTER",
-      message: `${name}님이 ${room}님과의 채팅방에 접속하셨습니다.`,
+      message: `${name}님이 ${room}방에 접속하셨습니다.`,
     });
   });
 
