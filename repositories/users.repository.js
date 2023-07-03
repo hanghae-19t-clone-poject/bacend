@@ -18,7 +18,7 @@ class UserRepository {
   // 회원가입
   signup = async (
     nickname,
-    password,
+    hashedPassword,
     email,
     location,
     profile_image,
@@ -26,7 +26,7 @@ class UserRepository {
   ) => {
     const signupData = await this.usersModel.create({
       nickname,
-      password,
+      hashedPassword,
       email,
       location,
       profile_image,

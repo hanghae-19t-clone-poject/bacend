@@ -1,12 +1,13 @@
-const { ref } = require("joi");
-const UserRepository = require("../repositories/users.repository");
-const TokenRepository = require("../repositories/tokens.repository");
-const jwt = require("jsonwebtoken");
-const { Users } = require("../models");
+const { ref } = require('joi');
+const UserRepository = require('../repositories/users.repository');
+const TokenRepository = require('../repositories/tokens.repository');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const { Users, Tokens } = require('../models');
 
 class UserService {
   userRepository = new UserRepository(Users);
-  tokenRepository = new TokenRepository();
+  tokenRepository = new TokenRepository(Tokens);
 
   // 중복되는 닉네임 찾기
   findNickname = async (nickname) => {
@@ -29,9 +30,12 @@ class UserService {
     profile_image,
     introduction
   ) => {
+    const saltRounds = BCRYPT_SALT_ROUNDS;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const signupData = await this.userRepository.signup(
       nickname,
-      password,
+      hashedPassword,
       email,
       location,
       profile_image,
@@ -47,31 +51,27 @@ class UserService {
   };
 
   // 로그인 가능한 회원인지 확인
-  loginUser = async (nickname) => {
+  login = async (nickname) => {
     const loginUser = await this.userRepository.login(nickname);
-    return loginUser;
-  };
 
-  // accessToken 생성
-  createAccessToken = async (loginUser) => {
-    const { user_id } = loginUser;
-    const accessToken = jwt.sign({ user_id: user_id }, process.env.ACCESS_KEY, {
-      expiresIn: process.env.ACCESS_EXPIRES,
-    });
-    return accessToken;
-  };
-  // refreshToken 생성
-  createRefreshToken = async () => {
+    // accessToken 생성
+    const accessToken = jwt.sign(
+      { user_id: loginUser.user_id },
+      process.env.ACCESS_KEY,
+      {
+        expiresIn: process.env.ACCESS_EXPIRES,
+      }
+    );
+
+    // refreshToken 생성
     const refreshToken = jwt.sign({}, process.env.REFRESH_KEY, {
       expiresIn: process.env.REFRESH_EXPIRES,
     });
-    return refreshToken;
-  };
 
-  // Tokens table에 refresh token 저장
-  saveToken = async (loginUser, refreshToken) => {
-    const { user_id } = loginUser;
-    await this.tokenRepository.saveToken(user_id, refreshToken);
+    // Tokens Table에 refresh token 저장
+    await this.tokenRepository.saveToken(loginUser.user_id, refreshToken);
+
+    return { accessToken, refreshToken };
   };
 
   // logout 했을 때, token 삭제
@@ -80,5 +80,4 @@ class UserService {
     return;
   };
 }
-
 module.exports = UserService;
