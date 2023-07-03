@@ -1,9 +1,9 @@
-const { ref } = require('joi');
-const UserRepository = require('../repositories/users.repository');
-const TokenRepository = require('../repositories/tokens.repository');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const { Users, Tokens } = require('../models');
+const { ref } = require("joi");
+const UserRepository = require("../repositories/users.repository");
+const TokenRepository = require("../repositories/tokens.repository");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const { Users, Tokens } = require("../models");
 
 class UserService {
   userRepository = new UserRepository(Users);
