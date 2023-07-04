@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
-const { Users } = require("../models");
+const { Users, Tokens } = require("../models");
 const TokenRepository = require("../repositories/tokens.repository");
 
-const tokenRepository = new TokenRepository();
+const tokenRepository = new TokenRepository(Tokens);
 
 module.exports = async (req, res, next) => {
   let { accesstoken, refreshtoken } = req.headers;

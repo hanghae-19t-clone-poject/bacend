@@ -1,4 +1,5 @@
 const UserService = require("../services/users.service");
+const bcrypt = require("bcryptjs");
 
 class UserController {
   userService = new UserService();
@@ -145,20 +146,31 @@ class UserController {
       }
 
       // 해당하는 유저가 존재하지 않는 경우
-      const loginUser = await this.userService.loginUser(nickname);
-      console.log(loginUser.user_id);
-      if (!loginUser || loginUser.password !== password) {
+      const findNicknameUser = await this.userService.findNickname(nickname);
+
+      if (!findNicknameUser) {
+        return res
+          .status(412)
+          .json({ errorMessage: "닉네임 또는 패스워드를 확인해주세요." });
+      }
+
+      const matchPassword = await bcrypt.compare(
+        password,
+        findNicknameUser.password
+      );
+
+      if (!matchPassword) {
         return res
           .status(412)
           .json({ errorMessage: "닉네임 또는 패스워드를 확인해주세요." });
       }
 
       // 로그인 성공하면 Access token, Refresh token 생성
-      const accessToken = await this.userService.createAccessToken(loginUser);
-      const refreshToken = await this.userService.createRefreshToken();
+      const { accessToken, refreshToken } = await this.userService.login(
+        nickname
+      );
 
       // Tokens table에 refresh token 저장
-      await this.userService.saveToken(loginUser, refreshToken);
 
       res.cookie("accesstoken", `Bearer ${accessToken}`);
       res.cookie("refreshtoken", `Bearer ${refreshToken}`);

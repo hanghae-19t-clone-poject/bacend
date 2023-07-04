@@ -1,32 +1,31 @@
+const { Users } = require("../models");
+
 class UserRepository {
-  constructor(UsersModel) {
-    this.usersModel = UsersModel;
-  }
   // DB에서 중복되는 닉네임 찾기
   findNickname = async (nickname) => {
-    const existNickname = await this.usersModel.findOne({
+    const existNickname = await Users.findOne({
       where: { nickname },
     });
     return existNickname;
   };
   // DB에서 중복되는 이메일 찾기
   findEmail = async (email) => {
-    const existEmail = await this.usersModel.findOne({ where: { email } });
+    const existEmail = await Users.findOne({ where: { email } });
     return existEmail;
   };
 
   // 회원가입
   signup = async (
     nickname,
-    password,
+    hashedPassword,
     email,
     location,
     profile_image,
     introduction
   ) => {
-    const signupData = await this.usersModel.create({
+    const signupData = await Users.create({
       nickname,
-      password,
+      password: hashedPassword,
       email,
       location,
       profile_image,
@@ -37,7 +36,7 @@ class UserRepository {
 
   // 회원탈퇴
   deleteSignup = async (user_id) => {
-    await this.usersModel.destroy({
+    await Users.destroy({
       where: { user_id },
     });
     return;
@@ -45,7 +44,7 @@ class UserRepository {
 
   // 로그인 정보
   login = async (nickname) => {
-    const loginUser = await this.usersModel.findOne({ where: { nickname } });
+    const loginUser = await Users.findOne({ where: { nickname } });
     return loginUser;
   };
 }
