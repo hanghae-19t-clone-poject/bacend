@@ -7,7 +7,7 @@ const { Users, Tokens } = require("../models");
 const config = require("../config/config");
 
 class UserService {
-  userRepository = new UserRepository(Users);
+  userRepository = new UserRepository();
   tokenRepository = new TokenRepository(Tokens);
 
   // 중복되는 닉네임 찾기

@@ -1,5 +1,5 @@
 const PostRepository = require("../repositories/posts.repository");
-const { post } = require("../routes");
+// const { post } = require("../routes");
 const postRepository = new PostRepository();
 
 class PostService {
@@ -38,15 +38,13 @@ class PostService {
     }
   }
 
-
-  
   async getBestPosts() {
     try {
       const posts = await postRepository.getPosts();
-  
+
       posts.sort((a, b) => b.likes - a.likes);
       const topTwentyPosts = posts.slice(0, 20);
-  
+
       const results = await Promise.all(
         topTwentyPosts.map(async (item) => {
           const bestPosts = {
@@ -64,7 +62,7 @@ class PostService {
             current_status: item.current_status,
             commentCount: null,
           };
-  
+
           return bestPosts;
         })
       );
@@ -72,8 +70,7 @@ class PostService {
     } catch (error) {
       return { error: true, message: error.message };
     }
-  };
-
+  }
 
   getPostById = async (post_id) => {
     const post = await postRepository.findPostById(post_id);
